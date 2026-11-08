@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Lasca — warm, artisanal, minimalist */
+    --background: 40 40% 97%;        /* #FBF8F2 warm paper */
+    --foreground: 25 32% 16%;        /* deep cocoa text */
+
+    --card: 40 44% 98%;
+    --card-foreground: var(--foreground);
+
+    --muted: 38 26% 91%;
+    --muted-foreground: 28 14% 42%;
+
+    --border: 32 22% 86%;
+    --input: 32 22% 86%;
+    --ring: 25 34% 32%;
+
+    /* Brand */
+    --brand-brown: 25 34% 32%;       /* #6e4e37 */
+    --brand-brown-deep: 24 36% 22%;
+    --brand-cream: 47 85% 81%;       /* #f8e6a6 */
+    --brand-cream-soft: 46 72% 90%;
+    --brand-green: 145 50% 24%;
+
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: clip;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: hsl(var(--brand-cream));
+    color: hsl(var(--brand-brown-deep));
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  /* fine dotted / grain-like paper texture via radial dots */
+  .bg-grain {
+    background-image: radial-gradient(hsl(var(--brand-brown) / 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .section-pad {
+    @apply py-24 md:py-32;
+  }
+  /* hide scrollbar for marquee rows */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
