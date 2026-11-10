@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import { products } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { canPlayAlphaVideo } from "@/lib/alphaVideo";
+import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
 import { useI18n } from "@/i18n";
 
 export function Flavors() {
   const { t, localize } = useI18n();
-  const motion = canPlayAlphaVideo();
+  const motion = preferredAlphaKind();
   return (
     <section id="sabores" className="relative overflow-hidden bg-background pb-8 pt-24 md:pt-16">
       <h2 className="px-5 font-display text-[15vw] font-medium leading-[0.85] tracking-[-0.05em] text-brand-brown md:px-10 md:text-[22vw]">
@@ -50,7 +50,7 @@ export function Flavors() {
               </h3>
               {product.video && motion ? (
                 <video
-                  src={product.video}
+                  src={alphaVideoSrc(product.video, motion)}
                   autoPlay
                   muted
                   loop

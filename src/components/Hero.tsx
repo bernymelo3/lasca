@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heroShots, shotPose } from "@/data/heroShots";
-import { canPlayAlphaVideo } from "@/lib/alphaVideo";
+import { canPlayAlphaVideo, alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
 
 export function Hero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -8,7 +8,7 @@ export function Hero() {
   const shotRefs = useRef<Array<HTMLElement | null>>([]);
   const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 767px)").matches);
   const [moving, setMoving] = useState<Record<string, boolean>>({});
-  const motion = canPlayAlphaVideo();
+  const motion = preferredAlphaKind();
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -101,7 +101,7 @@ export function Hero() {
             >
               {motion ? (
                 <video
-                  src={shot.video}
+                  src={alphaVideoSrc(shot.video, motion)}
                   muted
                   loop
                   playsInline
