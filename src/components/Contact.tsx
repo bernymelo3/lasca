@@ -4,7 +4,7 @@ import { useI18n } from "@/i18n";
 import { Reveal } from "./Reveal";
 
 const EMAIL = "hi@lasca.pt";
-const INSTAGRAM = "https://instagram.com/lasca";
+const INSTAGRAM = "https://www.instagram.com/hi.lasca/";
 
 export function Contact() {
   const { t } = useI18n();
@@ -59,7 +59,7 @@ export function Contact() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-3 text-brand-cream transition-colors hover:text-white"
                 >
-                  <Instagram className="h-5 w-5" strokeWidth={1.6} /> @lasca
+                  <Instagram className="h-5 w-5" strokeWidth={1.6} /> @hi.lasca
                 </a>
                 <a
                   href="https://wa.me/351900000000"
