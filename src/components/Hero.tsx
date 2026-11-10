@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { heroShots, shotPose } from "@/data/heroShots";
 import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
+import { CutoutVideo } from "./CutoutVideo";
 
 export function Hero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -99,7 +100,17 @@ export function Hero() {
                 opacity: motion ? (moving[shot.id] ? 1 : 0) : 1,
               }}
             >
-              {motion ? (
+              {motion && phone ? (
+                <CutoutVideo
+                  webm={shot.video}
+                  kind={motion}
+                  label={shot.alt}
+                  className="relative block w-full"
+                  onReady={() =>
+                    setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
+                  }
+                />
+              ) : motion ? (
                 <video
                   src={alphaVideoSrc(shot.video, motion)}
                   muted

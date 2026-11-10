@@ -1,12 +1,21 @@
-import type { CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { products } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
+import { CutoutVideo } from "./CutoutVideo";
 import { useI18n } from "@/i18n";
 
 export function Flavors() {
   const { t, localize } = useI18n();
   const motion = preferredAlphaKind();
+  const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 767px)").matches);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setPhone(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
   return (
     <section id="sabores" className="relative overflow-hidden bg-background pb-8 pt-24 md:pt-16">
       <h2 className="px-5 font-display text-[15vw] font-medium leading-[0.85] tracking-[-0.05em] text-brand-brown md:px-10 md:text-[22vw]">
@@ -49,6 +58,17 @@ export function Flavors() {
                 </span>
               </h3>
               {product.video && motion ? (
+                phone ? (
+                  <CutoutVideo
+                    webm={product.video}
+                    kind={motion}
+                    className={cn(
+                      "pointer-events-none relative z-10 mx-auto mt-2 block w-[70vw] max-w-[280px] rotate-[var(--spin)] md:absolute md:top-[46%] md:mx-0 md:mt-0 md:w-[46vw] md:max-w-none md:-translate-y-1/2",
+                      flip ? "md:left-[3%]" : "md:right-[3%]"
+                    )}
+                    style={{ ["--spin" as string]: `${product.rotate}deg` }}
+                  />
+                ) : (
                 <video
                   src={alphaVideoSrc(product.video, motion)}
                   autoPlay
@@ -64,6 +84,7 @@ export function Flavors() {
                   )}
                   style={{ "--spin": `${product.rotate}deg` } as CSSProperties}
                 />
+                )
               ) : (
                 <img
                   src={product.image}

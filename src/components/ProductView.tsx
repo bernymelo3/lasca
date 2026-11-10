@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type Ref } from "react";
 import { products, type Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
+import { CutoutVideo } from "./CutoutVideo";
 import { useI18n } from "@/i18n";
 
 function scrollToTop() {
@@ -15,6 +16,7 @@ function scrollToTop() {
 export function ProductView({ product }: { product: Product }) {
   const { t, localize } = useI18n();
   const motion = preferredAlphaKind();
+  const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 767px)").matches);
   const view = localize(product);
   const imgRef = useRef<HTMLElement>(null);
   const [sizeIndex, setSizeIndex] = useState(0);
@@ -30,6 +32,13 @@ export function ProductView({ product }: { product: Product }) {
       document.title = previousTitle;
     };
   }, [product, view.name]);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const onChange = () => setPhone(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const img = imgRef.current;
@@ -78,6 +87,14 @@ export function ProductView({ product }: { product: Product }) {
           </p>
 
           {product.video && motion ? (
+            phone ? (
+              <span
+                ref={imgRef}
+                className="absolute left-1/2 top-[46%] z-10 block w-[min(78vw,420px)] md:top-[42%] md:w-[min(86vw,560px)]"
+              >
+                <CutoutVideo webm={product.video} kind={motion} label={view.name} className="block w-full" />
+              </span>
+            ) : (
             <video
               ref={imgRef as Ref<HTMLVideoElement>}
               src={alphaVideoSrc(product.video, motion)}
@@ -90,6 +107,7 @@ export function ProductView({ product }: { product: Product }) {
               height={product.height}
               className="cutout-video cutout-shadow absolute left-1/2 top-[46%] z-10 w-[min(78vw,420px)] bg-transparent drop-shadow-[0_34px_28px_rgba(40,24,14,0.32)] md:top-[42%] md:w-[min(86vw,560px)]"
             />
+            )
           ) : (
             <img
               ref={imgRef as Ref<HTMLImageElement>}
