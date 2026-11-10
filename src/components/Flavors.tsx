@@ -2,7 +2,6 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { products } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
-import { CutoutVideo } from "./CutoutVideo";
 import { useI18n } from "@/i18n";
 
 export function Flavors() {
@@ -57,18 +56,7 @@ export function Flavors() {
                   ))}
                 </span>
               </h3>
-              {product.video && motion ? (
-                phone ? (
-                  <CutoutVideo
-                    webm={product.video}
-                    kind={motion}
-                    className={cn(
-                      "pointer-events-none relative z-10 mx-auto mt-2 block w-[70vw] max-w-[280px] rotate-[var(--spin)] md:absolute md:top-[46%] md:mx-0 md:mt-0 md:w-[46vw] md:max-w-none md:-translate-y-1/2",
-                      flip ? "md:left-[3%]" : "md:right-[3%]"
-                    )}
-                    style={{ ["--spin" as string]: `${product.rotate}deg` }}
-                  />
-                ) : (
+              {product.video && motion && !phone ? (
                 <video
                   src={alphaVideoSrc(product.video, motion)}
                   autoPlay
@@ -84,7 +72,6 @@ export function Flavors() {
                   )}
                   style={{ "--spin": `${product.rotate}deg` } as CSSProperties}
                 />
-                )
               ) : (
                 <img
                   src={product.image}

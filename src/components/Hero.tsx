@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heroShots, shotPose } from "@/data/heroShots";
 import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
-import { CutoutVideo } from "./CutoutVideo";
 
 export function Hero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -70,11 +69,17 @@ export function Hero() {
   }, []);
 
   useEffect(() => {
-    shotRefs.current.forEach((node) => {
-      const video = node?.querySelector("video");
-      if (!video) return;
-      video.play().catch(() => {});
-    });
+    const root = trackRef.current;
+    if (!root) return;
+    const videos = () => [...root.querySelectorAll("video")];
+    const play = () => videos().forEach((video) => video.play().catch(() => {}));
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) play();
+      else videos().forEach((video) => video.pause());
+    }, { threshold: 0.2 });
+    observer.observe(root);
+    play();
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -110,23 +115,13 @@ export function Hero() {
                 opacity: motion ? (moving[shot.id] ? 1 : 0) : 1,
               }}
             >
-              {motion && phone ? (
-                <CutoutVideo
-                  webm={shot.video}
-                  kind={motion}
-                  label={shot.alt}
-                  className="relative block w-full"
-                  onReady={() =>
-                    setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
-                  }
-                />
-              ) : motion ? (
+              {motion ? (
                 <video
                   src={alphaVideoSrc(shot.video, motion)}
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload={phone ? "metadata" : "auto"}
                   autoPlay
                   aria-label={shot.alt}
                   className="cutout-video h-auto w-full bg-transparent"
