@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type Ref } from "react";
 import { products, type Product } from "@/data/products";
 import { cn } from "@/lib/utils";
-import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
+import { preferredAlphaKind } from "@/lib/alphaVideo";
+import { LoopCutout } from "@/components/LoopCutout";
 import { useI18n } from "@/i18n";
 
 function scrollToTop() {
@@ -78,18 +79,19 @@ export function ProductView({ product }: { product: Product }) {
           </p>
 
           {product.video && motion ? (
-            <video
-              ref={imgRef as Ref<HTMLVideoElement>}
-              src={alphaVideoSrc(product.video, motion)}
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-label={view.name}
-              width={product.width}
-              height={product.height}
-              className="cutout-video cutout-shadow absolute left-1/2 top-[46%] z-10 w-[min(78vw,420px)] bg-transparent drop-shadow-[0_34px_28px_rgba(40,24,14,0.32)] md:top-[42%] md:w-[min(86vw,560px)]"
-            />
+            <div
+              ref={imgRef as Ref<HTMLDivElement>}
+              className="cutout-shadow absolute left-1/2 top-[46%] z-10 w-[min(78vw,420px)] md:top-[42%] md:w-[min(86vw,560px)] md:drop-shadow-[0_34px_28px_rgba(40,24,14,0.32)]"
+            >
+              <LoopCutout
+                webm={product.video}
+                poster={product.image}
+                kind={motion}
+                width={product.width}
+                height={product.height}
+                className="relative block w-full"
+              />
+            </div>
           ) : (
             <img
               ref={imgRef as Ref<HTMLImageElement>}
