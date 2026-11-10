@@ -7,7 +7,7 @@ export function Hero() {
   const wordRef = useRef<HTMLHeadingElement>(null);
   const shotRefs = useRef<Array<HTMLElement | null>>([]);
   const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 767px)").matches);
-  const [moving, setMoving] = useState<Record<string, boolean>>({});
+  const [ready, setReady] = useState<Record<string, boolean>>({});
   const motion = preferredAlphaKind();
 
   useEffect(() => {
@@ -19,11 +19,13 @@ export function Hero() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const mq = window.matchMedia("(max-width: 767px)");
     let frame = 0;
+    let lastProgress = -1;
+    let lastNarrow = mq.matches;
 
-    const paint = (progress: number) => {
+    const paint = (progress: number, narrow: boolean) => {
       const eased = progress * progress * (3 - 2 * progress);
-      const narrow = window.matchMedia("(max-width: 767px)").matches;
       if (wordRef.current) {
         wordRef.current.style.transform = narrow
           ? "translate3d(-50%, 0, 0)"
@@ -48,7 +50,12 @@ export function Hero() {
       if (!track) return;
       const total = track.offsetHeight - window.innerHeight;
       const scrolled = Math.min(Math.max(-track.getBoundingClientRect().top, 0), Math.max(total, 0));
-      paint(total > 0 ? scrolled / total : 0);
+      const progress = total > 0 ? scrolled / total : 0;
+      const narrow = mq.matches;
+      if (progress === lastProgress && narrow === lastNarrow) return;
+      lastProgress = progress;
+      lastNarrow = narrow;
+      paint(progress, narrow);
     };
 
     measure();
@@ -71,15 +78,31 @@ export function Hero() {
   useEffect(() => {
     const root = trackRef.current;
     if (!root) return;
+    let visible = true;
     const videos = () => [...root.querySelectorAll("video")];
-    const play = () => videos().forEach((video) => video.play().catch(() => {}));
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) play();
-      else videos().forEach((video) => video.pause());
-    }, { threshold: 0.2 });
+    const play = () => {
+      if (!visible) return;
+      videos().forEach((video) => {
+        video.defaultMuted = true;
+        video.muted = true;
+        if (video.paused) video.play().catch(() => {});
+      });
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) play();
+        else videos().forEach((video) => video.pause());
+      },
+      { threshold: 0.05 },
+    );
     observer.observe(root);
     play();
-    return () => observer.disconnect();
+    window.addEventListener("touchstart", play, { passive: true, once: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("touchstart", play);
+    };
   }, []);
 
   return (
@@ -107,30 +130,46 @@ export function Hero() {
               ref={(node) => {
                 shotRefs.current[i] = node;
               }}
-              className="cutout-shadow absolute z-20 block drop-shadow-[0_18px_10px_rgba(40,24,14,0.2)] transition-opacity duration-1000 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-brown"
+              aria-label={shot.alt}
+              className="cutout-shadow absolute z-20 block will-change-transform drop-shadow-[0_18px_10px_rgba(40,24,14,0.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-brown"
               style={{
                 top: pose.top,
                 left: pose.left,
                 width: pose.width,
-                opacity: motion ? (moving[shot.id] ? 1 : 0) : 1,
               }}
             >
               {motion ? (
-                <video
-                  src={alphaVideoSrc(shot.video, motion)}
-                  muted
-                  loop
-                  playsInline
-                  preload={phone ? "metadata" : "auto"}
-                  autoPlay
-                  aria-label={shot.alt}
-                  className="cutout-video h-auto w-full bg-transparent"
-                  onPlaying={() =>
-                    setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
-                  }
-                />
+                <>
+                  {!ready[shot.id] && (
+                    <img src={shot.src} alt="" className="block h-auto w-full" draggable={false} />
+                  )}
+                  <video
+                    src={alphaVideoSrc(shot.video, motion)}
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    autoPlay
+                    aria-hidden
+                    onLoadedData={(e) => {
+                      const video = e.currentTarget;
+                      video.defaultMuted = true;
+                      video.muted = true;
+                      video.play().catch(() => {});
+                      setReady((prev) => (prev[shot.id] ? prev : { ...prev, [shot.id]: true }));
+                    }}
+                    onPlaying={() => {
+                      setReady((prev) => (prev[shot.id] ? prev : { ...prev, [shot.id]: true }));
+                    }}
+                    className={
+                      ready[shot.id]
+                        ? "cutout-video block h-auto w-full bg-transparent"
+                        : "cutout-video pointer-events-none absolute inset-0 h-full w-full bg-transparent opacity-0"
+                    }
+                  />
+                </>
               ) : (
-                <img src={shot.src} alt={shot.alt} className="h-auto w-full" draggable={false} />
+                <img src={shot.src} alt={shot.alt} className="block h-auto w-full" draggable={false} />
               )}
             </a>
           );
