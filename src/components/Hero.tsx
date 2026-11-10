@@ -20,29 +20,31 @@ export function Hero() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+
     const paint = (progress: number) => {
+      const eased = progress * progress * (3 - 2 * progress);
       const narrow = window.matchMedia("(max-width: 767px)").matches;
       if (wordRef.current) {
         wordRef.current.style.transform = narrow
-          ? `translate3d(-50%, ${progress * 12}vh, 0)`
-          : `translate3d(calc(-50% + ${progress * 8}vw), 0, 0)`;
+          ? "translate3d(-50%, 0, 0)"
+          : `translate3d(calc(-50% + ${eased * 4}vw), 0, 0)`;
       }
       heroShots.forEach((shot, i) => {
         const el = shotRefs.current[i];
         if (!el) return;
         if (narrow) {
-          const tilt = shot.rotate * 0.45 + progress * (i % 2 === 0 ? 4 : -4);
-          el.style.transform = `translate3d(0, ${progress * 6}vh, 0) rotate(${tilt}deg)`;
+          const lift = 6 + (i % 3) * 4;
+          const tilt = shot.rotate * 0.35 + eased * (i % 2 === 0 ? 2.5 : -2.5);
+          el.style.transform = `translate3d(0, ${-eased * lift}vh, 0) rotate(${tilt}deg)`;
           return;
         }
-        el.style.transform = `translate3d(${-progress * shot.shift}vw, 0, 0) rotate(${shot.rotate}deg)`;
+        const drift = 8 + shot.shift * 0.16;
+        el.style.transform = `translate3d(${-eased * drift}vw, ${eased * -2}vh, 0) rotate(${shot.rotate}deg)`;
       });
     };
 
-    paint(0);
-    if (reduce) return;
-
-    const onScroll = () => {
+    const measure = () => {
       const track = trackRef.current;
       if (!track) return;
       const total = track.offsetHeight - window.innerHeight;
@@ -50,10 +52,18 @@ export function Hero() {
       paint(total > 0 ? scrolled / total : 0);
     };
 
-    onScroll();
+    measure();
+    if (reduce) return;
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
@@ -71,7 +81,7 @@ export function Hero() {
     <section
       id="top"
       ref={trackRef}
-      className="relative h-screen motion-safe:h-[220vh] md:motion-safe:h-[340vh]"
+      className="relative h-screen motion-safe:h-[145vh] md:motion-safe:h-[220vh]"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-background">
         <div className="absolute inset-x-0 bottom-0 h-[40%] bg-brand-brown-deep md:h-[48%]" />
