@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heroShots, shotPose } from "@/data/heroShots";
-import { canPlayAlphaVideo, alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
+import { alphaVideoSrc, preferredAlphaKind } from "@/lib/alphaVideo";
 
 export function Hero() {
   const trackRef = useRef<HTMLElement>(null);
