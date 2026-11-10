@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { heroShots, shotPose } from "@/data/heroShots";
+import { canPlayAlphaVideo } from "@/lib/alphaVideo";
 
 export function Hero() {
   const trackRef = useRef<HTMLElement>(null);
@@ -7,6 +8,7 @@ export function Hero() {
   const shotRefs = useRef<Array<HTMLElement | null>>([]);
   const [phone, setPhone] = useState(() => window.matchMedia("(max-width: 767px)").matches);
   const [moving, setMoving] = useState<Record<string, boolean>>({});
+  const motion = canPlayAlphaVideo();
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -94,22 +96,26 @@ export function Hero() {
                 top: pose.top,
                 left: pose.left,
                 width: pose.width,
-                opacity: moving[shot.id] ? 1 : 0,
+                opacity: motion ? (moving[shot.id] ? 1 : 0) : 1,
               }}
             >
-              <video
-                src={shot.video}
-                muted
-                loop
-                playsInline
-                preload="auto"
-                autoPlay
-                aria-label={shot.alt}
-                className="h-auto w-full"
-                onPlaying={() =>
-                  setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
-                }
-              />
+              {motion ? (
+                <video
+                  src={shot.video}
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  autoPlay
+                  aria-label={shot.alt}
+                  className="h-auto w-full"
+                  onPlaying={() =>
+                    setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
+                  }
+                />
+              ) : (
+                <img src={shot.src} alt={shot.alt} className="h-auto w-full" draggable={false} />
+              )}
             </a>
           );
         })}

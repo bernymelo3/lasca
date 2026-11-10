@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type Ref } from "react";
 import { products, type Product } from "@/data/products";
 import { cn } from "@/lib/utils";
+import { canPlayAlphaVideo } from "@/lib/alphaVideo";
 import { useI18n } from "@/i18n";
 
 function scrollToTop() {
@@ -13,6 +14,7 @@ function scrollToTop() {
 
 export function ProductView({ product }: { product: Product }) {
   const { t, localize } = useI18n();
+  const motion = canPlayAlphaVideo();
   const view = localize(product);
   const imgRef = useRef<HTMLElement>(null);
   const [sizeIndex, setSizeIndex] = useState(0);
@@ -75,7 +77,7 @@ export function ProductView({ product }: { product: Product }) {
             {t.hand[1]}
           </p>
 
-          {product.video ? (
+          {product.video && motion ? (
             <video
               ref={imgRef as Ref<HTMLVideoElement>}
               src={product.video}
