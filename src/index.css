@@ -84,3 +84,16 @@
   to { transform: translate3d(0, 0, 0) rotate(var(--spin)); }
 }
 
+.cutout-video {
+  background-color: transparent;
+  object-fit: contain;
+  -webkit-mask-image: radial-gradient(circle, #fff 100%, #000 100%);
+  mask-image: radial-gradient(circle, #fff 100%, #000 100%);
+}
+
+@media (max-width: 767px) {
+  .cutout-shadow {
+    filter: none !important;
+  }
+}
+

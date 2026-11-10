@@ -88,7 +88,7 @@ export function ProductView({ product }: { product: Product }) {
               aria-label={view.name}
               width={product.width}
               height={product.height}
-              className="absolute left-1/2 top-[46%] z-10 w-[min(78vw,420px)] drop-shadow-[0_34px_28px_rgba(40,24,14,0.32)] md:top-[42%] md:w-[min(86vw,560px)]"
+              className="cutout-video cutout-shadow absolute left-1/2 top-[46%] z-10 w-[min(78vw,420px)] bg-transparent drop-shadow-[0_34px_28px_rgba(40,24,14,0.32)] md:top-[42%] md:w-[min(86vw,560px)]"
             />
           ) : (
             <img

@@ -91,7 +91,7 @@ export function Hero() {
               ref={(node) => {
                 shotRefs.current[i] = node;
               }}
-              className="absolute z-20 block drop-shadow-[0_18px_10px_rgba(40,24,14,0.2)] transition-opacity duration-1000 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-brown"
+              className="cutout-shadow absolute z-20 block drop-shadow-[0_18px_10px_rgba(40,24,14,0.2)] transition-opacity duration-1000 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-brown"
               style={{
                 top: pose.top,
                 left: pose.left,
@@ -108,7 +108,7 @@ export function Hero() {
                   preload="auto"
                   autoPlay
                   aria-label={shot.alt}
-                  className="h-auto w-full"
+                  className="cutout-video h-auto w-full bg-transparent"
                   onPlaying={() =>
                     setMoving((current) => (current[shot.id] ? current : { ...current, [shot.id]: true }))
                   }

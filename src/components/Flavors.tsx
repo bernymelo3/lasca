@@ -59,7 +59,7 @@ export function Flavors() {
                   width={product.width}
                   height={product.height}
                   className={cn(
-                    "pointer-events-none relative z-10 mx-auto mt-2 w-[70vw] max-w-[280px] rotate-[var(--spin)] drop-shadow-[0_30px_24px_rgba(40,24,14,0.32)] md:absolute md:top-[46%] md:mx-0 md:mt-0 md:w-[46vw] md:max-w-none md:-translate-y-1/2",
+                    "cutout-video cutout-shadow pointer-events-none relative z-10 mx-auto mt-2 w-[70vw] max-w-[280px] rotate-[var(--spin)] bg-transparent drop-shadow-[0_30px_24px_rgba(40,24,14,0.32)] md:absolute md:top-[46%] md:mx-0 md:mt-0 md:w-[46vw] md:max-w-none md:-translate-y-1/2",
                     flip ? "md:left-[3%]" : "md:right-[3%]"
                   )}
                   style={{ "--spin": `${product.rotate}deg` } as CSSProperties}
