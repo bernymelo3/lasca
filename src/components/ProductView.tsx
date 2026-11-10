@@ -79,7 +79,6 @@ export function ProductView({ product }: { product: Product }) {
             <video
               ref={imgRef as Ref<HTMLVideoElement>}
               src={product.video}
-              poster={product.image}
               autoPlay
               muted
               loop

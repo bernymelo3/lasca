@@ -33,7 +33,7 @@ export function Nav({ logoVisible = true }: { logoVisible?: boolean }) {
             logoVisible ? "opacity-100" : "opacity-0"
           )}
         >
-          <img src="/logos/Lasca-1.svg" alt="" className="h-14 w-auto md:h-20" />
+          <img src="/logos/Lasca-1.svg" alt="" className="h-11 w-auto md:h-20" />
         </a>
         <button
           type="button"

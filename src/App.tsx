@@ -31,8 +31,13 @@ function jump(hash: string) {
 export default function App() {
   const { t } = useI18n();
   const [productId, setProductId] = useState(readProductId);
-  const [introDone, setIntroDone] = useState(false);
-  const finishIntro = useCallback(() => setIntroDone(true), []);
+  const [introOn, setIntroOn] = useState(true);
+  const [logoOn, setLogoOn] = useState(false);
+  const openIntro = useCallback(() => setLogoOn(true), []);
+  const finishIntro = useCallback(() => {
+    setLogoOn(true);
+    setIntroOn(false);
+  }, []);
 
   useEffect(() => {
     const apply = () => {
@@ -49,8 +54,8 @@ export default function App() {
 
   return (
     <div className="relative">
-      {!introDone && <Intro onDone={finishIntro} />}
-      <Nav logoVisible={introDone} />
+      {introOn && <Intro onOpening={openIntro} onDone={finishIntro} />}
+      <Nav logoVisible={logoOn} />
       <main>
         {product ? (
           <ProductView product={product} />

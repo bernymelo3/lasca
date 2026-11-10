@@ -3,11 +3,14 @@ import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { Reveal } from "./Reveal";
 
-const EMAIL = "ola@lasca.pt";
+const EMAIL = "hi@lasca.pt";
+const INSTAGRAM = "https://instagram.com/lasca";
 
 export function Contact() {
   const { t } = useI18n();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -20,7 +23,9 @@ export function Contact() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(`${t.mailSubject} — ${name || "Lasca"}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name}`);
+    const body = encodeURIComponent(
+      `${t.name}: ${name}\n${t.phone}: ${phone}\n${t.email}: ${email}\n\n${message}`
+    );
     window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   };
 
@@ -43,18 +48,18 @@ export function Contact() {
 
               <div className="mt-8 flex flex-col gap-3">
                 <a
-                  href={`https://instagram.com/lasca`}
+                  href={`mailto:${EMAIL}`}
+                  className="inline-flex items-center gap-3 text-brand-cream transition-colors hover:text-white"
+                >
+                  <Mail className="h-5 w-5" strokeWidth={1.6} /> {EMAIL}
+                </a>
+                <a
+                  href={INSTAGRAM}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-3 text-brand-cream transition-colors hover:text-white"
                 >
                   <Instagram className="h-5 w-5" strokeWidth={1.6} /> @lasca
-                </a>
-                <a
-                  href={`mailto:${EMAIL}`}
-                  className="inline-flex items-center gap-3 text-brand-cream transition-colors hover:text-white"
-                >
-                  <Mail className="h-5 w-5" strokeWidth={1.6} /> {EMAIL}
                 </a>
                 <a
                   href="https://wa.me/351900000000"
@@ -75,8 +80,34 @@ export function Contact() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                    autoComplete="name"
                     className="min-h-11 rounded-xl border border-brand-cream/20 bg-brand-cream/10 px-4 py-3 text-base text-brand-cream outline-none placeholder:text-brand-cream/40 focus:border-brand-cream"
                     placeholder={t.namePh}
+                  />
+                </label>
+                <label className="flex flex-col gap-2 text-sm">
+                  {t.phone}
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    autoComplete="tel"
+                    inputMode="tel"
+                    className="min-h-11 rounded-xl border border-brand-cream/20 bg-brand-cream/10 px-4 py-3 text-base text-brand-cream outline-none placeholder:text-brand-cream/40 focus:border-brand-cream"
+                    placeholder={t.phonePh}
+                  />
+                </label>
+                <label className="flex flex-col gap-2 text-sm">
+                  {t.email}
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                    className="min-h-11 rounded-xl border border-brand-cream/20 bg-brand-cream/10 px-4 py-3 text-base text-brand-cream outline-none placeholder:text-brand-cream/40 focus:border-brand-cream"
+                    placeholder={t.emailPh}
                   />
                 </label>
                 <label className="flex flex-col gap-2 text-sm">

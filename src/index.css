@@ -79,3 +79,8 @@
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
 
+@keyframes intro-jar {
+  from { transform: translate3d(0, -8vh, 0) rotate(var(--spin)); }
+  to { transform: translate3d(0, 0, 0) rotate(var(--spin)); }
+}
+

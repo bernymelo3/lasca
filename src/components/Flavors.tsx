@@ -6,8 +6,8 @@ import { useI18n } from "@/i18n";
 export function Flavors() {
   const { t, localize } = useI18n();
   return (
-    <section id="sabores" className="relative overflow-hidden bg-background pb-8 pt-10">
-      <h2 className="px-4 font-display text-[22vw] font-medium leading-[0.8] tracking-[-0.06em] text-brand-brown md:px-10">
+    <section id="sabores" className="relative overflow-hidden bg-background pb-8 pt-24 md:pt-16">
+      <h2 className="px-5 font-display text-[15vw] font-medium leading-[0.85] tracking-[-0.05em] text-brand-brown md:px-10 md:text-[22vw]">
         {t.flavors}
       </h2>
 
@@ -33,7 +33,12 @@ export function Flavors() {
                     {line}
                   </span>
                 ))}
-                <span className="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-sans text-[13px] font-normal tracking-[0.14em] text-brand-brown/65 md:mt-4 md:text-sm md:tracking-[0.16em]">
+                <span
+                  className={cn(
+                    "mt-3 flex w-fit max-w-full flex-wrap gap-x-3 gap-y-1 font-sans text-[13px] font-normal tracking-[0.14em] text-brand-brown/65 md:mt-4 md:text-sm md:tracking-[0.16em]",
+                    flip && "md:ml-auto"
+                  )}
+                >
                   {product.sizes.map((size) => (
                     <span key={size.label}>
                       {size.label} · {size.price}€
@@ -44,7 +49,6 @@ export function Flavors() {
               {product.video ? (
                 <video
                   src={product.video}
-                  poster={product.image}
                   autoPlay
                   muted
                   loop
