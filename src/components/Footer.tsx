@@ -17,13 +17,21 @@ export function Footer() {
             {t.privacy.more}
           </a>
         </p>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          {t.nav.map((link) => (
-            <a key={link.href} href={link.href} className="hover:text-white">
-              {link.label}
-            </a>
-          ))}
-        </nav>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          <nav className="flex flex-wrap gap-x-6 gap-y-2">
+            {t.nav.map((link) => (
+              <a key={link.href} href={link.href} className="hover:text-white">
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <a
+            href="https://seaweed.digital"
+            className="text-brand-cream/55 hover:text-white"
+          >
+            Built by seaweed
+          </a>
+        </div>
       </div>
     </footer>
   );

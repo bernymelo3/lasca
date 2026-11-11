@@ -17,11 +17,15 @@ function readProductId() {
   return match?.[1] ?? null;
 }
 
+function isPrivacyPage() {
+  return window.location.hash === "#privacidade";
+}
+
 function jump(hash: string) {
   const root = document.documentElement;
   const previous = root.style.scrollBehavior;
   root.style.scrollBehavior = "auto";
-  if (hash && !hash.startsWith("#produto/")) {
+  if (hash && !hash.startsWith("#produto/") && hash !== "#privacidade") {
     document.querySelector(hash)?.scrollIntoView();
   } else {
     root.scrollTop = 0;
@@ -43,6 +47,7 @@ function shouldShowIntro() {
 export default function App() {
   const { t } = useI18n();
   const [productId, setProductId] = useState(readProductId);
+  const [privacyOn, setPrivacyOn] = useState(isPrivacyPage);
   const [introOn, setIntroOn] = useState(shouldShowIntro);
   const [logoOn, setLogoOn] = useState(() => !shouldShowIntro());
   const openIntro = useCallback(() => setLogoOn(true), []);
@@ -60,7 +65,8 @@ export default function App() {
     const apply = () => {
       const id = readProductId();
       setProductId(id);
-      requestAnimationFrame(() => jump(id ? "" : window.location.hash));
+      setPrivacyOn(isPrivacyPage());
+      requestAnimationFrame(() => jump(id || isPrivacyPage() ? "" : window.location.hash));
     };
     apply();
     window.addEventListener("hashchange", apply);
@@ -74,7 +80,9 @@ export default function App() {
       {introOn && <Intro onOpening={openIntro} onDone={finishIntro} />}
       <Nav logoVisible={logoOn} />
       <main>
-        {product ? (
+        {privacyOn ? (
+          <PrivacySection />
+        ) : product ? (
           <ProductView product={product} />
         ) : productId ? (
           <section className="grid min-h-screen place-items-center px-6 text-center">
@@ -95,7 +103,6 @@ export default function App() {
           </>
         )}
       </main>
-      <PrivacySection />
       <Footer />
       {!introOn && <PrivacyBar />}
     </div>

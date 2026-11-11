@@ -73,9 +73,12 @@ export function PrivacyBar() {
 export function PrivacySection() {
   const { t } = useI18n();
   return (
-    <section id="privacidade" className="bg-background px-4 py-16 md:px-10 md:py-24">
+    <section className="min-h-screen bg-background px-4 pb-16 pt-28 md:px-10 md:pb-24 md:pt-32">
       <div className="mx-auto max-w-3xl">
-        <h2 className="font-display text-5xl leading-none text-brand-brown md:text-6xl">{t.privacy.title}</h2>
+        <a href="#top" className="text-xs uppercase tracking-[0.18em] text-brand-brown/60 hover:text-brand-brown">
+          {t.back}
+        </a>
+        <h2 className="mt-6 font-display text-5xl leading-none text-brand-brown md:text-6xl">{t.privacy.title}</h2>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-foreground/75">{t.privacy.lead}</p>
         <div className="mt-10 divide-y divide-brand-brown/15 border-t border-brand-brown/15">
           {t.privacy.blocks.map((block) => (
