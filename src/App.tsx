@@ -6,6 +6,7 @@ import { Flavors } from "./components/Flavors";
 import { Care } from "./components/Care";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { PrivacyBar, PrivacySection } from "./components/Privacy";
 import { ProductView } from "./components/ProductView";
 import { Intro } from "./components/Intro";
 import { useI18n } from "./i18n";
@@ -28,13 +29,29 @@ function jump(hash: string) {
   root.style.scrollBehavior = previous;
 }
 
+function shouldShowIntro() {
+  if (typeof window === "undefined") return false;
+  if (window.location.hash) return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  try {
+    return sessionStorage.getItem("lasca-intro") !== "1";
+  } catch {
+    return true;
+  }
+}
+
 export default function App() {
   const { t } = useI18n();
   const [productId, setProductId] = useState(readProductId);
-  const [introOn, setIntroOn] = useState(true);
-  const [logoOn, setLogoOn] = useState(false);
+  const [introOn, setIntroOn] = useState(shouldShowIntro);
+  const [logoOn, setLogoOn] = useState(() => !shouldShowIntro());
   const openIntro = useCallback(() => setLogoOn(true), []);
   const finishIntro = useCallback(() => {
+    try {
+      sessionStorage.setItem("lasca-intro", "1");
+    } catch {
+      // Ignore storage restrictions
+    }
     setLogoOn(true);
     setIntroOn(false);
   }, []);
@@ -78,7 +95,9 @@ export default function App() {
           </>
         )}
       </main>
+      <PrivacySection />
       <Footer />
+      {!introOn && <PrivacyBar />}
     </div>
   );
 }

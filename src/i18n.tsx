@@ -139,6 +139,31 @@ const ui = {
     send: "Enviar pedido",
     mailSubject: "Encomenda Lasca",
     footer: "Salame artesanal, cortado à fatia.",
+    privacy: {
+      bar: "Sem cookies de rastreio. Neste aparelho fica só o idioma e, durante a visita, o rascunho do pedido.",
+      ok: "Percebi",
+      more: "Proteção de dados",
+      title: "Proteção de dados",
+      lead: "Um sítio pequeno, sem rastreio. Aqui está o que fazemos com o que nos diz.",
+      blocks: [
+        {
+          h: "Quem",
+          p: "A Lasca trata os dados dos pedidos. Para aceder, corrigir ou apagar os seus dados, escreva para hi@lasca.pt.",
+        },
+        {
+          h: "Encomendas",
+          p: "O nome, o telemóvel, o email e o pedido são enviados pelo seu programa de email para hi@lasca.pt. O site não guarda essa mensagem. Servem só para responder e tratar da encomenda, ao abrigo do artigo 6.º, n.º 1, alínea b) do RGPD. Ficam no email o tempo necessário para a encomenda e para obrigações legais.",
+        },
+        {
+          h: "Neste aparelho",
+          p: "Não há cookies de publicidade nem de medição de audiência, por isso não pedimos autorização para rastrear. Guardamos o idioma que escolheu, a nota de que esta informação já foi lida, e — só enquanto a página está aberta — que a introdução já passou e o texto do pedido. Pode apagar isto nas definições do browser.",
+        },
+        {
+          h: "Letras e direitos",
+          p: "As fontes são pedidas à Google, que pode receber o seu endereço IP para as entregar. Pode pedir acesso, retificação, apagamento, limitação ou oposição, e apresentar reclamação à CNPD, em cnpd.pt.",
+        },
+      ],
+    },
     missing: "Este produto não está no menu.",
     back: "Voltar ao início",
     serve: "Como servir",
@@ -191,6 +216,31 @@ const ui = {
     send: "Send order",
     mailSubject: "Lasca order",
     footer: "Artisan salame, cut into a slice.",
+    privacy: {
+      bar: "We do not use advertising or analytics cookies. On this device we only keep the language and, during the visit, the order draft.",
+      ok: "Got it",
+      more: "Your data",
+      title: "Your data",
+      lead: "A small site, with no tracking. This is what we do with what you tell us.",
+      blocks: [
+        {
+          h: "Who",
+          p: "Lasca handles order details. To access, correct or delete your data, write to hi@lasca.pt.",
+        },
+        {
+          h: "Orders",
+          p: "Your name, phone number, email and order are sent by your own email app to hi@lasca.pt. The site does not store that message. We use them only to reply and fulfil the order, under article 6(1)(b) of the GDPR. They stay in the inbox for as long as the order and any legal duties require.",
+        },
+        {
+          h: "On this device",
+          p: "There are no advertising or analytics cookies, so we do not ask permission to track you. We keep the language you chose, the note that you have read this, and — only while the tab is open — that the intro has played and the order draft. You can clear this in your browser settings.",
+        },
+        {
+          h: "Type and your rights",
+          p: "The typefaces are requested from Google, which may receive your IP address in order to deliver them. You can ask for access, correction, deletion, restriction or to object, and you can complain to the Portuguese data authority, CNPD, at cnpd.pt.",
+        },
+      ],
+    },
     missing: "This product is not on the menu.",
     back: "Back to the start",
     serve: "How to serve",

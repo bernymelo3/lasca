@@ -33,7 +33,7 @@ export function Nav({ logoVisible = true }: { logoVisible?: boolean }) {
             logoVisible ? "opacity-100" : "opacity-0"
           )}
         >
-          <img src="/logos/Lasca-1.svg" alt="" className="h-11 w-auto md:h-20" />
+          <img src="/logos/Lasca-1.svg" alt="Lasca" width={120} height={56} decoding="async" className="h-11 w-auto md:h-20" />
         </a>
         <button
           type="button"
@@ -49,7 +49,8 @@ export function Nav({ logoVisible = true }: { logoVisible?: boolean }) {
         </button>
       </div>
 
-      <div
+      <nav
+        aria-label={t.menu}
         hidden={!open}
         className="pointer-events-auto absolute inset-x-4 top-24 rounded-[1.5rem] bg-brand-brown-deep p-8 text-brand-cream shadow-2xl md:inset-x-auto md:right-8 md:w-80"
       >
@@ -66,7 +67,7 @@ export function Nav({ logoVisible = true }: { logoVisible?: boolean }) {
             </li>
           ))}
         </ul>
-      </div>
+      </nav>
     </header>
   );
 }

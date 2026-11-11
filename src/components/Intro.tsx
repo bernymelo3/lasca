@@ -98,7 +98,13 @@ export function Intro({ onOpening, onDone }: { onOpening?: () => void; onDone: (
 
   useEffect(() => {
     if (percent >= loaded) return;
-    const step = window.setTimeout(() => setPercent((current) => Math.min(loaded, current + 1)), 18);
+    const step = window.setTimeout(
+      () =>
+        setPercent((current) =>
+          Math.min(loaded, current + Math.max(2, Math.ceil((loaded - current) * 0.35))),
+        ),
+      24,
+    );
     return () => window.clearTimeout(step);
   }, [percent, loaded]);
 
@@ -112,8 +118,8 @@ export function Intro({ onOpening, onDone }: { onOpening?: () => void; onDone: (
     const reveal = window.setTimeout(() => {
       setOpen(true);
       onOpening?.();
-    }, 350);
-    const finish = window.setTimeout(onDone, 1450);
+    }, 150);
+    const finish = window.setTimeout(onDone, 900);
     return () => {
       window.clearTimeout(reveal);
       window.clearTimeout(finish);

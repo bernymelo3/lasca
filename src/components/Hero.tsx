@@ -141,10 +141,20 @@ export function Hero() {
               {motion ? (
                 <>
                   {!ready[shot.id] && (
-                    <img src={shot.src} alt="" className="block h-auto w-full" draggable={false} />
+                    <img
+                      src={shot.src}
+                      alt=""
+                      width={960}
+                      height={640}
+                      decoding="async"
+                      className="block h-auto w-full"
+                      draggable={false}
+                    />
                   )}
                   <video
                     src={alphaVideoSrc(shot.video, motion)}
+                    width={960}
+                    height={640}
                     muted
                     loop
                     playsInline
@@ -169,7 +179,15 @@ export function Hero() {
                   />
                 </>
               ) : (
-                <img src={shot.src} alt={shot.alt} className="block h-auto w-full" draggable={false} />
+                <img
+                  src={shot.src}
+                  alt={shot.alt}
+                  width={960}
+                  height={640}
+                  decoding="async"
+                  className="block h-auto w-full"
+                  draggable={false}
+                />
               )}
             </a>
           );

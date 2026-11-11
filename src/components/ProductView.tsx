@@ -27,17 +27,25 @@ export function ProductView({ product }: { product: Product }) {
     scrollToTop();
     const previousTitle = document.title;
     document.title = `${view.name} — Lasca`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const previousDesc = metaDesc?.getAttribute("content") ?? null;
+    if (metaDesc) metaDesc.setAttribute("content", `${view.name} — ${view.lead}`);
     return () => {
       document.title = previousTitle;
+      if (metaDesc && previousDesc !== null) metaDesc.setAttribute("content", previousDesc);
     };
-  }, [product, view.name]);
+  }, [product, view.name, view.lead]);
 
   useEffect(() => {
     const img = imgRef.current;
     if (!img) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+    let lastProgress = -1;
 
     const paint = (progress: number) => {
+      if (progress === lastProgress) return;
+      lastProgress = progress;
       const rise = (1 - progress) * 32 - 6;
       const tilt = product.rotate + progress * 12;
       img.style.transform = `translate3d(-50%, ${rise}vh, 0) rotate(${tilt}deg)`;
@@ -46,13 +54,20 @@ export function ProductView({ product }: { product: Product }) {
     paint(reduce ? 0.55 : 0);
     if (reduce) return;
 
-    const onScroll = () => {
+    const measure = () => {
       const progress = Math.min(Math.max(window.scrollY / (window.innerHeight * 0.8), 0), 1);
       paint(progress);
     };
-    onScroll();
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [product]);
 
   return (
@@ -175,9 +190,11 @@ export function ProductView({ product }: { product: Product }) {
               >
                 <img
                   src={item.image}
-                  alt=""
+                  alt={other.name}
                   width={item.width}
                   height={item.height}
+                  loading="lazy"
+                  decoding="async"
                   className={cn(
                     "mx-auto h-36 w-full md:h-44",
                     item.cutout ? "object-contain drop-shadow-[0_16px_14px_rgba(40,24,14,0.28)]" : "rounded-2xl object-cover"

@@ -35,6 +35,10 @@ export function Story() {
           <img
             src="/images/story.jpg"
             alt={t.storyAlt}
+            width={1200}
+            height={1600}
+            loading="lazy"
+            decoding="async"
             className="aspect-[4/5] w-full rounded-[1.5rem] object-cover shadow-[0_30px_60px_-30px_rgba(74,47,34,0.55)]"
           />
         </figure>
